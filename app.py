@@ -13,8 +13,17 @@ if st.button("Phân tích dữ liệu"):
             result = parse_raw_data(raw_text)
             st.subheader("Kết quả phân tích")
 
+            # Hiển thị từng trường với nút copy
             for k, v in result.items():
-                st.write(f"**{k}**: {v}")
+                st.markdown(f"**{k}**: {v}")
+                copy_button = f"""
+                <button style="margin-bottom:10px;" 
+                        onclick="navigator.clipboard.writeText('{v}')">
+                        📋 Copy
+                </button>
+                """
+                st.markdown(copy_button, unsafe_allow_html=True)
+
         except Exception as e:
             st.error(f"Đã xảy ra lỗi khi phân tích dữ liệu: {e}")
     else:
