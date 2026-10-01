@@ -13,7 +13,7 @@ def normalize_international_name(name: str) -> str:
     """Chuẩn hóa tên quốc tế theo quy tắc."""
     formatted = format_title_case(name)
     formatted = formatted.replace("Company Limited", "Co Ltd")
-    formatted = formatted.replace("JOINT STOCK COMPANY", "JSC")
+    formatted = formatted.replace("Joint Stock Company", "JSC")
     return formatted.strip()
 
 def parse_raw_data(text: str) -> dict:
