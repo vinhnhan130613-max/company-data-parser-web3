@@ -32,6 +32,27 @@ def normalize_address_segment(segment: str) -> str:
     seg = seg.replace("Khu Đô Thị", "KĐT")
     return seg
 
+def translate_address_segment(segment: str) -> str:
+    """Dịch từng đoạn địa chỉ sang tiếng Anh, bỏ dấu, thêm hậu tố nếu có."""
+    seg = segment.strip()
+    if "Đường" in seg:
+        return unidecode.unidecode(seg.replace("Đường", "").strip()) + " St"
+    elif "Khu phố" in seg:
+        return unidecode.unidecode(seg.replace("Khu phố", "").strip()) + " Quarter"
+    elif "Thôn" in seg:
+        return unidecode.unidecode(seg.replace("Thôn", "").strip()) + " Village"
+    elif "Ấp" in seg:
+        return unidecode.unidecode(seg.replace("Ấp", "").strip()) + " Hamlet"
+    else:
+        return unidecode.unidecode(seg)
+
+def build_field4(field3: str) -> str:
+    """Xây dựng Trường 4 từ Trường 3 bằng cách dịch từng đoạn."""
+    translated_segments = []
+    for seg in field3.split(","):
+        translated_segments.append(translate_address_segment(seg))
+    return ", ".join(translated_segments)
+
 def parse_raw_data(text: str) -> dict:
     result = {}
 
@@ -58,21 +79,8 @@ def parse_raw_data(text: str) -> dict:
         before_area = normalize_address_segment(before_area)
         result["Trường 3"] = before_area
 
-        # Trường 4: dịch sang tiếng Anh từ Trường 3
-        translated_segments = []
-        for seg in before_area.split(","):
-            seg = seg.strip()
-            if seg.startswith("Đường"):
-                translated_segments.append(unidecode.unidecode(seg.replace("Đường", "").strip()) + " St")
-            elif seg.startswith("Khu phố"):
-                translated_segments.append(unidecode.unidecode(seg.replace("Khu phố", "").strip()) + " Quarter")
-            elif seg.startswith("Thôn"):
-                translated_segments.append(unidecode.unidecode(seg.replace("Thôn", "").strip()) + " Village")
-            elif seg.startswith("Ấp"):
-                translated_segments.append(unidecode.unidecode(seg.replace("Ấp", "").strip()) + " Hamlet")
-            else:
-                translated_segments.append(unidecode.unidecode(seg))
-        result["Trường 4"] = ", ".join(translated_segments)
+        # Trường 4: dịch từ Trường 3
+        result["Trường 4"] = build_field4(before_area)
 
         if len(parts) > 1:
             area = parts[1].strip().rstrip(",")
