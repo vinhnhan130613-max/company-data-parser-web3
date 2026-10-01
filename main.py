@@ -10,11 +10,27 @@ def format_title_case(text: str) -> str:
     return formatted
 
 def normalize_international_name(name: str) -> str:
-    """Chuẩn hóa tên quốc tế theo quy tắc."""
+    """Chuẩn hóa tên quốc tế theo quy tắc, không phân biệt hoa thường."""
     formatted = format_title_case(name)
-    formatted = formatted.replace("Company Limited", "Co Ltd")
-    formatted = formatted.replace("Joint Stock Company", "JSC")
+
+    if "company limited" in name.lower():
+        formatted = formatted.replace("Company Limited", "Co Ltd")
+    if "joint stock company" in name.lower():
+        formatted = formatted.replace("Joint Stock Company", "JSC")
+        formatted = formatted.replace("JOINT STOCK COMPANY", "JSC")
+    if "cổ phần" in name.lower():
+        formatted = formatted.replace("Cổ Phần", "CP")
+
     return formatted.strip()
+
+def normalize_address_segment(segment: str) -> str:
+    """Chuẩn hóa các cụm đặc biệt trong Trường 3."""
+    seg = segment.strip()
+    seg = seg.replace("Khu Dân Cư", "KDC")
+    seg = seg.replace("Khu Công Nghiệp", "KCN")
+    seg = seg.replace("Cụm Công Nghiệp", "CCN")
+    seg = seg.replace("Khu Đô Thị", "KĐT")
+    return seg
 
 def parse_raw_data(text: str) -> dict:
     result = {}
@@ -37,8 +53,12 @@ def parse_raw_data(text: str) -> dict:
         addr_tax = match_addr_tax.group(1).strip()
         parts = re.split(r"(Phường\s+[^\n,]+|Xã\s+[^\n,]+)", addr_tax)
         before_area = parts[0].strip().rstrip(",")
+
+        # Áp dụng quy tắc viết tắt cho Trường 3
+        before_area = normalize_address_segment(before_area)
         result["Trường 3"] = before_area
 
+        # Trường 4: dịch sang tiếng Anh từ Trường 3
         translated_segments = []
         for seg in before_area.split(","):
             seg = seg.strip()
