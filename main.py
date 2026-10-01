@@ -35,6 +35,18 @@ def normalize_address_segment(segment: str) -> str:
 def translate_address_segment(segment: str) -> str:
     """Dịch từng đoạn địa chỉ sang tiếng Anh, bỏ dấu, thêm hậu tố nếu có."""
     seg = segment.strip()
+
+    # Quy tắc cho Tổ/TDP/Tổ Dân Phố
+    if "Tổ Dân Phố" in seg or "TDP" in seg or seg.startswith("Tổ"):
+        parts = seg.split()
+        # Nếu có số → Group + số
+        for word in parts:
+            if word.isdigit():
+                return "Group " + word
+        # Nếu không phải số → tên không dấu + Group
+        name = unidecode.unidecode(" ".join(parts[1:])).strip()
+        return name + " Group"
+
     if "Đường" in seg:
         return unidecode.unidecode(seg.replace("Đường", "").strip()) + " St"
     elif "Khu phố" in seg:
