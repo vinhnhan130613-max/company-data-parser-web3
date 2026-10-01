@@ -11,7 +11,11 @@
   - "Company Limited" → "Co Ltd".  
   - "JOINT STOCK COMPANY" → "JSC".  
   - "Cổ phần" → "CP".  
-- **Trường 3**: Địa chỉ trước khi gặp Phường/Xã.  
+- **Trường 3**: Địa chỉ trước khi gặp Phường/Xã, có quy tắc viết tắt:  
+  - "Khu Dân Cư" → "KDC"  
+  - "Khu Công Nghiệp" → "KCN"  
+  - "Cụm Công Nghiệp" → "CCN"  
+  - "Khu Đô Thị" → "KĐT"  
 - **Trường 4**: Dịch Trường 3 sang tiếng Anh (không dấu + hậu tố St/Quarter/Village/Hamlet).  
 - **Trường 5**: Phường/Xã từ địa chỉ thuế.  
 - **Trường 6**: Dịch sang tiếng Anh (Ward/Commune).  
