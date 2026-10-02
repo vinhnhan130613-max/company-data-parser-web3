@@ -1,5 +1,6 @@
 import streamlit as st
 from main import parse_raw_data
+from streamlit_copy_to_clipboard import st_copy_to_clipboard
 
 st.title("Company Data Parser (Raw Data)")
 
@@ -16,13 +17,7 @@ if st.button("Phân tích dữ liệu"):
             # Hiển thị từng trường với nút copy
             for k, v in result.items():
                 st.markdown(f"**{k}**: {v}")
-                copy_button = f"""
-                <button style="margin-bottom:10px;" 
-                        onclick="navigator.clipboard.writeText('{v}')">
-                        📋 Copy
-                </button>
-                """
-                st.markdown(copy_button, unsafe_allow_html=True)
+                st_copy_to_clipboard(v, f"📋 Copy {k}")
 
         except Exception as e:
             st.error(f"Đã xảy ra lỗi khi phân tích dữ liệu: {e}")
