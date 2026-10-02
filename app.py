@@ -11,18 +11,10 @@ if st.button("Phân tích dữ liệu"):
             result = parse_raw_data(raw_text)
             st.subheader("Kết quả phân tích")
 
-            # Hiển thị từng trường với nút copy bằng HTML/JS
+            # Hiển thị từng trường với box có nút copy tích hợp
             for k, v in result.items():
-                st.markdown(f"**{k}**: {v}")
-                st.markdown(
-                    f"""
-                    <button style="margin-bottom:10px;"
-                            onclick="navigator.clipboard.writeText('{v}')">
-                            📋 Copy {k}
-                    </button>
-                    """,
-                    unsafe_allow_html=True
-                )
+                st.write(f"**{k}**:")
+                st.code(v, language="text")  # có nút copy mặc định
 
         except Exception as e:
             st.error(f"Lỗi khi phân tích dữ liệu: {e}")
